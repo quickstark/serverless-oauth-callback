@@ -16,7 +16,7 @@ This uses the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) wi
     - Setup Google OAuth 2 Profile and Sheets Access (see below)
     - Setup Box in a similar but much easier way (see below))
 
-3.  Create \*.env file in root and provide keys for the following:
+3.  Create .env file in root and provide keys for the following:
     SYNC_NAME="<Name for Twilio Sync Service and Sync Map>"
     BOX_CLIENT_ID="<copied from Box Developer Console>"
     BOX_CLIENT_SECRETE="<copied from Box Developer Console>"
@@ -43,6 +43,11 @@ This uses the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) wi
 6.  Once deployed, visit your [Twilio Functions](https://www.twilio.com/console/functions/overview/services)
 
 7.  Copy to URL to the index.html and paste into a fresh browser tab. You should see the Oauth Buttons
+
+    - Click on either
+    - If configured correctly (e.g. all the URLs and IDs were update from above steps), you should be redirected and and Authorize
+    - _Google will throw a non-verified App error for development projects. You'll have to by pass this and accept._
+    - Once you complete Auth, you will be returned to Twilio and a page showing the temporate Auth Code should display
 
 8.  You should now be able to update a Phone Number Webhook by pointing to the appropriate Callback Function (callback_box or callback_google)
 
