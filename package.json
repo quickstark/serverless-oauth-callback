@@ -1,0 +1,22 @@
+{
+  "name": "serverless-oauth-callback",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "twilio-run",
+    "ngrok": "twilio-run --ngrok",
+    "deploy": "twilio-run deploy"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "lodash": "^4.17.20",
+    "twilio": "^3.57.0"
+  },
+  "devDependencies": {
+    "twilio-run": "^2.6.0"
+  },
+  "engines": {
+    "node": "10"
+  }
+}

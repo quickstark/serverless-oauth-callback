@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Twilio Serverless OAuth Tri-Legged</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script src="access.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <header class="center-block">
+          <h1>OAuth 2 Initial Token Generation</h1>
+        </header>
+      </div>
+      <div class="row justify-content-md-center mb-2">
+        <a
+          id="authredirectbox"
+          onclick="authredirectBox()"
+          class="btn btn-primary btn-lg active"
+          role="button"
+          >Authorize Box</a
+        >
+      </div>
+      <div class="row justify-content-md-center">
+        <a
+          id="authredirectgoogle"
+          onclick="authredirectGoogle()"
+          class="btn btn-primary btn-lg active"
+          role="button"
+          >Authorize Google Sheets</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
