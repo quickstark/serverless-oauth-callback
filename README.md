@@ -1,6 +1,9 @@
-# Twilio Serverless JWT Callback
+# Twilio Serverless Oauth Callback
 
-This is just a simple Twilio Serverless Function to demonstrate authenticating callbacks/webhooks to Google Sheets
+Twilio Serverless Functions to demonstrate Tri-Legged Oauth callbacks/webhooks to Box and Google Sheets
+
+** Important: Twilio Functions are limited to ~20 executions / second, so this is purely for demonstration and/or
+relatively light use cases **
 
 This uses the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) with the [Twilio Serverless Plugin](https://www.twilio.com/docs/twilio-cli/plugins)
 
@@ -8,28 +11,62 @@ This uses the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) wi
 
 1.  Clone this repo
 
-2.  Copy the key from Google Step 2 (below) into the assets folder of your function (rename to key.private.json)
+2.  Setup Provider Profiles
 
-3.  Deploy the Serverless Function using Twilio CLI
+    - Setup Google OAuth 2 Profile and Sheets Access (see below)
+    - Setup Box in a similar but much easier way (see below))
+
+3.  Create \*.env file in root and provide keys for the following:
+    SYNC_NAME="<Name for Twilio Sync Service and Sync Map>"
+    BOX_CLIENT_ID="<copied from Box Developer Console>"
+    BOX_CLIENT_SECRETE="<copied from Box Developer Console>"
+    GOOGLE_CLIENT_ID="<copied from Google IAM Console>"
+    GOOGLE_CLIENT_SECRET="<copied from Google IAM Console>"
+
+4.  Update access.js in assets folder with Box and Google Client IDs (see Google instructions below)
+    _Note: You can ignore Box if you only care about Google_
+
+    - Or, you can add your own Provider by glancing through the code and modifying
+
+5.  Deploy the Serverless Function using Twilio CLI
 
     ```zsh
     twilio serverless:deploy
     ```
 
-3b. Once deployed, visit your [Twilio Console](https://www.twilio.com/console/functions/overview/services) click on the service link and grab the URL for the Function and path - `https://jwt-callback-NNNN-dev.twil.io/google_callback`
+    _Following initial deploy, if you want to overwrite an existing project_
 
-4.  Alternatively, you can run this locally for testing. See [Developing with the Serverless Toolkit](https://www.twilio.com/docs/labs/serverless-toolkit/developing?code-sample=code-run-a-serverless-project-locally&code-language=twilio-cli&code-sdk-version=default)
+    ```zsh
+    twilio serverless:deploy --override-existing-project
+    ```
 
-## Basics for Google Auth Key
+6.  Once deployed, visit your [Twilio Functions](https://www.twilio.com/console/functions/overview/services)
+
+7.  Copy to URL to the index.html and paste into a fresh browser tab. You should see the Oauth Buttons
+
+8.  You should now be able to update a Phone Number Webhook by pointing to the appropriate Callback Function (callback_box or callback_google)
+
+9.  Alternatively, you can run this locally for testing. See [Developing with the Serverless Toolkit](https://www.twilio.com/docs/labs/serverless-toolkit/developing?code-sample=code-run-a-serverless-project-locally&code-language=twilio-cli&code-sdk-version=default)
+
+## Basics for Google OAuth Client
 
 _(Google changes their IAM console regularly, so keeping this relatively generic)_
 
-    1. Create a service account: https://console.developers.google.com/iam-admin/serviceaccounts/
-    2. In options, create a key: this key client_secret.json
-    3. Make the role owner for the service account
-        - Member name = service account ID = service account email ex: someapp@appname-201813.iam.gserviceaccount.com
-    4. Copy the email address of your service account = service account ID
-    5. Simply go in your browser to the Google sheet you want to interact with
-    6. Go to SHARE on the top right of your screen
-    7. Go to advanced settings and share it with email address of your service account
-        - ex: someapp@appname-201813.iam.gserviceaccount.com
+    1. Visit Google IAM and create an OAuth 2.0 Client ID [Google IAM](https://console.developers.google.com/apis/credentials)
+    2. Provide a redirect URI * (Example: https://serverless-oauth-callback-8527-dev.twil.io/redirect_google) *
+        - You can get this URL the Twilio Function Editor [Twilio Functions](https://www.twilio.com/console/functions/overview/services)
+    3. Copy the Client ID from this page (and add it to *.env and access.js)
+    4. Copy the Client Secrete from this page (and add it to *.env)
+    5. *Important* You have to enable the Google Sheets API [Google Library](https://console.developers.google.com/apis/library?project=twilio-8cf4c)
+
+## Basics for Box OAuth Client
+
+    1. Visit [Box Developer Console](https://quickstark.app.box.com/developers/console)
+    2. Create a "New App"
+    3. Choose "Custom App"
+    4. Select "User Authentication (OAuth 2.0)" on the Authentication Method modal
+    5. Copy the Client ID (and add it to *.env and access.js)
+    6. Copy the Client Secrete (and add it toe *.env)
+    7. Provide a valid Redirect URI * (Example: https://serverless-oauth-callback-8527-dev.twil.io/callback_box) *
+    8. Check the box to provide "Write all files and folders stored in Box"
+    9. Save your changes
