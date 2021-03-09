@@ -19,7 +19,7 @@ This uses the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) wi
 3.  Create .env file in root and provide keys for the following:
     SYNC_NAME="<Name for Twilio Sync Service and Sync Map>"
     BOX_CLIENT_ID="<copied from Box Developer Console>"
-    BOX_CLIENT_SECRETE="<copied from Box Developer Console>"
+    BOX_CLIENT_SECRET="<copied from Box Developer Console>"
     GOOGLE_CLIENT_ID="<copied from Google IAM Console>"
     GOOGLE_CLIENT_SECRET="<copied from Google IAM Console>"
 
