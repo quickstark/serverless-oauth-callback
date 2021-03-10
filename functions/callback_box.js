@@ -9,7 +9,7 @@ const auth = require(oauthpath);
 exports.handler = function (context, event, callback) {
   //The event we're processing
   console.log("***** RAW Event *****");
-  console.log(event.SmsMessageSid, event.Body);
+  console.log(`Twilio Event: ${event.SmsMessageSid} &  ${event.Body}`);
 
   // IIFE Async to execute the Token Swap
   let boxcomment = (async () => {

@@ -1,5 +1,6 @@
 const querystring = require("querystring");
 const axios = require("axios");
+const { write } = require("fs");
 
 // Use Twilioi Runtime helper to grab the function path
 const syncpath = Runtime.getFunctions().sync.path;
@@ -38,7 +39,7 @@ async function getInitialTokens(provider, code) {
     res.data,
     queryparams.query.grant_type
   );
-  console.log(syncmapitem);
+  console.log(nicePrint`SyncMapItem ${syncmapitem}`);
   return syncmapitem;
 }
 
@@ -54,6 +55,8 @@ async function getTokensForProvider(provider) {
     let tokendata = await readTokens(provider);
     let tokens = tokendata.data;
 
+    console.log(nicePrint`Provider Tokens ${tokens}`);
+
     // Set query parms by provider
     let queryparams = getQueryForProvider(
       provider,
@@ -62,7 +65,9 @@ async function getTokensForProvider(provider) {
       tokens.refresh_token
     );
 
-    if (needRefresh(tokens)) {
+    let needrefresh = await needRefresh(tokens);
+    console.log(`Token Refresh Needed? ${needrefresh}`);
+    if (needrefresh) {
       // If expired, send refresh token in exchance for new access token
       const res = await axios.post(
         queryparams.authurl,
@@ -75,7 +80,7 @@ async function getTokensForProvider(provider) {
         res.data,
         queryparams.query.grant_type
       );
-      if (writetokens.data == "success") {
+      if ("access_token" in writetokens.data) {
         return { data: res.data.access_token };
       }
     } else {
@@ -233,7 +238,7 @@ function getQueryForProvider(provider, grant_type, code, refresh_token) {
  * @param {Object} tokens Token object
  * @returns {Boolean}
  */
-function needRefresh(tokens) {
+async function needRefresh(tokens) {
   // Set a current timestamp
   const date = new Date();
   const current = date.toISOString();
@@ -248,6 +253,11 @@ function needRefresh(tokens) {
   let seconds = Math.floor(diff / 1000);
   console.log(`Token Expiration Time Difference in Seconds ${seconds} / 3600`);
   return seconds < tokens.expires_in - 30 ? false : true;
+}
+
+function nicePrint(strings, ...values) {
+  console.log(strings[0]);
+  values.map((val) => console.log(val));
 }
 
 module.exports = {
